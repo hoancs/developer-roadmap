@@ -9,5 +9,4 @@ Variables in Flutter can store values of different data types, such as numbers, 
 
 Visit the following resources to learn more:
 
-- [Variables](https://dart.dev/guides/language/language-tour#variables)
-- [Dart - Variables](https://howtoflutter.dev/dart/variables/)
+- [@official@Variables](https://dart.dev/guides/language/language-tour#variables)

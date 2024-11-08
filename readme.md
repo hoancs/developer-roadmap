@@ -30,12 +30,24 @@ Roadmaps are now interactive, you can click the nodes to read more about the top
 
 Here is the list of available roadmaps with more being actively worked upon.
 
+> Have a look at the [get started](https://roadmap.sh/get-started) page that might help you pick up a path.
+
 - [Frontend Roadmap](https://roadmap.sh/frontend) / [Frontend Beginner Roadmap](https://roadmap.sh/frontend?r=frontend-beginner)
-- [Backend Roadmap](https://roadmap.sh/backend)
+- [Backend Roadmap](https://roadmap.sh/backend) / [Backend Beginner Roadmap](https://roadmap.sh/backend?r=backend-beginner)
 - [DevOps Roadmap](https://roadmap.sh/devops) / [DevOps Beginner Roadmap](https://roadmap.sh/devops?r=devops-beginner)
 - [Full Stack Roadmap](https://roadmap.sh/full-stack)
+- [Git and GitHub](https://roadmap.sh/git-github)
+- [API Design Roadmap](https://roadmap.sh/api-design)
 - [Computer Science Roadmap](https://roadmap.sh/computer-science)
+- [Data Structures and Algorithms Roadmap](https://roadmap.sh/datastructures-and-algorithms)
 - [AI and Data Scientist Roadmap](https://roadmap.sh/ai-data-scientist)
+- [AI Engineer Roadmap](https://roadmap.sh/ai-engineer)
+- [AWS Roadmap](https://roadmap.sh/aws)
+- [Linux Roadmap](https://roadmap.sh/linux)
+- [Terraform Roadmap](https://roadmap.sh/terraform)
+- [Data Analyst Roadmap](https://roadmap.sh/data-analyst)
+- [MLOps Roadmap](https://roadmap.sh/mlops)
+- [Product Manager Roadmap](https://roadmap.sh/product-manager)
 - [QA Roadmap](https://roadmap.sh/qa)
 - [Python Roadmap](https://roadmap.sh/python)
 - [Software Architect Roadmap](https://roadmap.sh/software-architect)
@@ -51,6 +63,7 @@ Here is the list of available roadmaps with more being actively worked upon.
 - [Node.js Roadmap](https://roadmap.sh/nodejs)
 - [GraphQL Roadmap](https://roadmap.sh/graphql)
 - [Android Roadmap](https://roadmap.sh/android)
+- [iOS Roadmap](https://roadmap.sh/ios)
 - [Flutter Roadmap](https://roadmap.sh/flutter)
 - [Go Roadmap](https://roadmap.sh/golang)
 - [Rust Roadmap](https://roadmap.sh/rust)
@@ -59,6 +72,7 @@ Here is the list of available roadmaps with more being actively worked upon.
 - [Design System Roadmap](https://roadmap.sh/design-system)
 - [PostgreSQL Roadmap](https://roadmap.sh/postgresql-dba)
 - [SQL Roadmap](https://roadmap.sh/sql)
+- [Redis Roadmap](https://roadmap.sh/redis)
 - [Blockchain Roadmap](https://roadmap.sh/blockchain)
 - [ASP.NET Core Roadmap](https://roadmap.sh/aspnet-core)
 - [System Design Roadmap](https://roadmap.sh/system-design)
@@ -69,18 +83,23 @@ Here is the list of available roadmaps with more being actively worked upon.
 - [Docker Roadmap](https://roadmap.sh/docker)
 - [Prompt Engineering Roadmap](https://roadmap.sh/prompt-engineering)
 - [Technical Writer Roadmap](https://roadmap.sh/technical-writer)
+- [DevRel Engineer Roadmap](https://roadmap.sh/devrel)
 
 There are also interactive best practices:
 
-- [Code Review Best Practices](https://roadmap.sh/best-practices/code-review)
+- [Backend Performance Best Practices](https://roadmap.sh/best-practices/backend-performance)
 - [Frontend Performance Best Practices](https://roadmap.sh/best-practices/frontend-performance)
+- [Code Review Best Practices](https://roadmap.sh/best-practices/code-review)
 - [API Security Best Practices](https://roadmap.sh/best-practices/api-security)
 - [AWS Best Practices](https://roadmap.sh/best-practices/aws)
 
 ..and questions to help you test, rate and improve your knowledge
 
 - [JavaScript Questions](https://roadmap.sh/questions/javascript)
+- [Node.js Questions](https://roadmap.sh/questions/nodejs)
 - [React Questions](https://roadmap.sh/questions/react)
+- [Backend Questions](https://roadmap.sh/questions/backend)
+- [Frontend Questions](https://roadmap.sh/questions/frontend)
 
 ![](https://i.imgur.com/waxVImv.png)
 
@@ -100,6 +119,7 @@ Clone the repository, install the dependencies and start the application
 
 ```bash
 git clone git@github.com:kamranahmedse/developer-roadmap.git
+cd developer-roadmap
 npm install
 npm run dev
 ```

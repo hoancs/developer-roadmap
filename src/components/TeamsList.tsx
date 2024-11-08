@@ -11,7 +11,7 @@ export function TeamsList() {
   const toast = useToast();
   async function getAllTeam() {
     const { response, error } = await httpGet<UserTeamItem[]>(
-      `${import.meta.env.PUBLIC_API_URL}/v1-get-user-teams`
+      `${import.meta.env.PUBLIC_API_URL}/v1-get-user-teams`,
     );
     if (error || !response) {
       toast.error(error?.message || 'Something went wrong');
@@ -36,6 +36,7 @@ export function TeamsList() {
             Here are the teams you are part of
           </p>
         </div>
+
         <ul className="mb-3 flex flex-col gap-1">
           <li>
             <a
@@ -64,7 +65,7 @@ export function TeamsList() {
             if (team.status === 'invited') {
               pageLink = `/respond-invite?i=${team.memberId}`;
             } else if (team.status === 'joined') {
-              pageLink = `/team/progress?t=${team._id}`;
+              pageLink = `/team/activity?t=${team._id}`;
             }
 
             return (

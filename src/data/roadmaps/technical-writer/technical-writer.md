@@ -1,12 +1,13 @@
 ---
 pdfUrl: '/pdfs/roadmaps/technical-writer.pdf'
 order: 17
+renderer: 'editor'
 briefTitle: 'Technical Writer'
 briefDescription: 'Roadmap for anyone looking for a career in technical writing'
 title: 'Technical Writer'
 description: 'Roadmap for anyone looking for a career in technical writing'
 hasTopics: true
-isNew: true
+isNew: false
 dimensions:
   width: 968
   height: 1958.71
@@ -20,7 +21,7 @@ seo:
   title: 'Technical Writer Roadmap'
   description: 'Learn what technical writing is, what technical writers do and how to become one using our community-driven roadmap.'
   keywords:
-    - 'technical writer roadmap 2023'
+    - 'technical writer roadmap 2024'
     - 'guide to becoming a technical writer'
     - 'technical writer roadmap'
     - 'technical writer'

@@ -4,7 +4,7 @@ import FeaturedGuides from '../components/FeaturedGuides.astro';
 import FeaturedItems from '../components/FeaturedItems/FeaturedItems.astro';
 import HeroSection from '../components/HeroSection/HeroSection.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getAllBestPractices } from '../lib/best-pratice';
+import { getAllBestPractices } from '../lib/best-practice';
 import { getAllGuides } from '../lib/guide';
 import { getRoadmapsByTag } from '../lib/roadmap';
 import { getAllVideos } from '../lib/video';
@@ -14,8 +14,21 @@ const roleRoadmaps = await getRoadmapsByTag('role-roadmap');
 const skillRoadmaps = await getRoadmapsByTag('skill-roadmap');
 const bestPractices = await getAllBestPractices();
 const questionGroups = await getAllQuestionGroups();
+const projectGroups = [
+  {
+    title: 'Frontend',
+    id: 'frontend',
+  },
+  {
+    title: 'Backend',
+    id: 'backend',
+  },
+]
 
 const guides = await getAllGuides();
+const questionGuides = (await getAllQuestionGroups()).filter(
+  (questionGroup) => questionGroup.frontmatter.authorId,
+);
 const videos = await getAllVideos();
 ---
 
@@ -28,7 +41,7 @@ const videos = await getAllVideos();
     <HeroSection />
 
     <FeaturedItems
-      heading='Role based Roadmaps'
+      heading='Role-based Roadmaps'
       featuredItems={roleRoadmaps
         .filter((roadmapItem) => !roadmapItem.frontmatter.isHidden)
         .map((roadmapItem) => ({
@@ -41,7 +54,7 @@ const videos = await getAllVideos();
     />
 
     <FeaturedItems
-      heading='Skill based Roadmaps'
+      heading='Skill-based Roadmaps'
       featuredItems={skillRoadmaps
         .filter((roadmapItem) => !roadmapItem.frontmatter.isHidden)
         .map((roadmapItem) => ({
@@ -54,6 +67,15 @@ const videos = await getAllVideos();
           isUpcoming: roadmapItem.frontmatter.isUpcoming,
         }))}
       showCreateRoadmap={true}
+    />
+
+    <FeaturedItems
+      heading='Project Ideas'
+      allowBookmark={false}
+      featuredItems={projectGroups.map((projectGroup) => ({
+        text: projectGroup.title,
+        url: `${projectGroup.id}/projects`,
+      }))}
     />
 
     <FeaturedItems
@@ -77,7 +99,11 @@ const videos = await getAllVideos();
     />
 
     <div class='grid grid-cols-1 gap-7 bg-gray-50 py-7 sm:gap-16 sm:py-16'>
-      <FeaturedGuides heading='Guides' guides={guides.slice(0, 7)} />
+      <FeaturedGuides
+        heading='Guides'
+        guides={guides.slice(0, 7)}
+        questions={questionGuides.slice(0, 7)}
+      />
       <FeaturedVideos heading='Videos' videos={videos.slice(0, 7)} />
     </div>
   </div>

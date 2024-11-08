@@ -10,7 +10,7 @@ export type SelectRoadmapModalProps = {
   teamId: string;
   allRoadmaps: PageType[];
   onClose: () => void;
-  teamResourceConfig: TeamResourceConfig;
+  teamResourceConfig: string[];
   onRoadmapAdd: (roadmapId: string) => void;
   onRoadmapRemove: (roadmapId: string) => void;
 };
@@ -60,15 +60,15 @@ export function SelectRoadmapModal(props: SelectRoadmapModalProps) {
     setSearchResults(searchResults);
   }, [searchText, allRoadmaps]);
 
-  const roleBasedRoadmaps = searchResults.filter(
-    (roadmap) => roadmap?.metadata?.tags?.includes('role-roadmap'),
+  const roleBasedRoadmaps = searchResults.filter((roadmap) =>
+    roadmap?.metadata?.tags?.includes('role-roadmap'),
   );
-  const skillBasedRoadmaps = searchResults.filter(
-    (roadmap) => roadmap?.metadata?.tags?.includes('skill-roadmap'),
+  const skillBasedRoadmaps = searchResults.filter((roadmap) =>
+    roadmap?.metadata?.tags?.includes('skill-roadmap'),
   );
 
   return (
-    <div className="fixed left-0 right-0 top-0 z-50 h-full items-center justify-center overflow-y-auto overflow-x-hidden overscroll-contain bg-black/50">
+    <div className="fixed left-0 right-0 top-0 z-[100] h-full items-center justify-center overflow-y-auto overflow-x-hidden overscroll-contain bg-black/50">
       <div className="relative mx-auto h-full w-full max-w-2xl p-4 md:h-auto">
         <div
           ref={popupBodyEl}
@@ -100,9 +100,7 @@ export function SelectRoadmapModal(props: SelectRoadmapModalProps) {
             {roleBasedRoadmaps.length > 0 && (
               <div className="mb-5 flex flex-wrap items-center gap-2">
                 {roleBasedRoadmaps.map((roadmap) => {
-                  const isSelected = !!teamResourceConfig?.find(
-                    (r) => r.resourceId === roadmap.id,
-                  );
+                  const isSelected = teamResourceConfig.includes(roadmap.id);
 
                   return (
                     <SelectRoadmapModalItem
@@ -126,9 +124,7 @@ export function SelectRoadmapModal(props: SelectRoadmapModalProps) {
             </span>
             <div className="flex flex-wrap items-center gap-2">
               {skillBasedRoadmaps.map((roadmap) => {
-                const isSelected = !!teamResourceConfig.find(
-                  (r) => r.resourceId === roadmap.id,
-                );
+                const isSelected = teamResourceConfig.includes(roadmap.id);
 
                 return (
                   <SelectRoadmapModalItem
@@ -146,6 +142,17 @@ export function SelectRoadmapModal(props: SelectRoadmapModalProps) {
                 );
               })}
             </div>
+          </div>
+
+          <div className="border-t border-t-yellow-300 bg-yellow-100 px-4 py-3 text-sm text-yellow-900">
+            <h2 className="mb-1 text-base font-medium text-yellow-900">
+              More Official Roadmaps Coming Soon
+            </h2>
+            <p>
+              We are currently adding more of our official roadmaps to this
+              list. If you don't see the roadmap you are looking for, please
+              check back later.
+            </p>
           </div>
         </div>
       </div>

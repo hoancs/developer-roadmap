@@ -28,7 +28,8 @@ int add(int a, int b)
 }
 
 int main()
-{   int (*funcptr) (int, int) = add; // Pointer 'funcptr' now points to the functions 'add'
+{
+  int (*funcptr) (int, int) = add; // Pointer 'funcptr' now points to the functions 'add'
   funcptr(4, 5); // Return 9
 }
 ``` 
@@ -53,3 +54,7 @@ int &ref = num; // Reference 'ref' is now an alias of 'num'
 Modifying the value of `ref` will also modify the value of `num` because they share the same memory location.
 
 **Note:** References are generally used when you want to pass a variable by reference in function arguments or when you want to create an alias for a variable without the need for pointer syntax.
+
+Learn more from the following resources:
+
+- [@article@Function Pointer in C++](https://www.scaler.com/topics/cpp/function-pointer-cpp/)

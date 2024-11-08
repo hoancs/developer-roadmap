@@ -1,7 +1,19 @@
-import { type FormEvent, useState } from 'react';
+import { type FormEvent, useEffect, useState } from 'react';
 import { httpPost } from '../../lib/http';
+import { deleteUrlParam, getUrlParams } from '../../lib/browser';
+import { isLoggedIn, setAIReferralCode } from '../../lib/jwt';
 
-export function EmailSignupForm() {
+type EmailSignupFormProps = {
+  isDisabled?: boolean;
+  setIsDisabled?: (isDisabled: boolean) => void;
+};
+
+export function EmailSignupForm(props: EmailSignupFormProps) {
+  const { isDisabled, setIsDisabled } = props;
+
+  const { rc: referralCode } = getUrlParams() as {
+    rc?: string;
+  };
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -13,6 +25,7 @@ export function EmailSignupForm() {
     e.preventDefault();
 
     setIsLoading(true);
+    setIsDisabled?.(true);
     setError('');
 
     const { response, error } = await httpPost<{ status: 'ok' }>(
@@ -21,22 +34,33 @@ export function EmailSignupForm() {
         email,
         password,
         name,
-      }
+      },
     );
 
     if (error || response?.status !== 'ok') {
       setIsLoading(false);
+      setIsDisabled?.(false);
       setError(
-        error?.message || 'Something went wrong. Please try again later.'
+        error?.message || 'Something went wrong. Please try again later.',
       );
 
       return;
     }
 
     window.location.href = `/verification-pending?email=${encodeURIComponent(
-      email
+      email,
     )}`;
   };
+
+  useEffect(() => {
+    if (!referralCode || isLoggedIn()) {
+      deleteUrlParam('rc');
+      return;
+    }
+
+    setAIReferralCode(referralCode);
+    deleteUrlParam('rc');
+  }, []);
 
   return (
     <form className="flex w-full flex-col gap-2" onSubmit={onSubmit}>
@@ -63,7 +87,7 @@ export function EmailSignupForm() {
         type="email"
         autoComplete="email"
         required
-        className="block w-full rounded-lg border border-gray-300 px-3 py-2  outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-black focus:ring-offset-1"
+        className="block w-full rounded-lg border border-gray-300 px-3 py-2 outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-black focus:ring-offset-1"
         placeholder="Email Address"
         value={email}
         onInput={(e) => setEmail(String((e.target as any).value))}
@@ -90,7 +114,7 @@ export function EmailSignupForm() {
 
       <button
         type="submit"
-        disabled={isLoading}
+        disabled={isLoading || isDisabled}
         className="inline-flex w-full items-center justify-center rounded-lg bg-black p-2 py-3 text-sm font-medium text-white outline-none focus:ring-2 focus:ring-black focus:ring-offset-1 disabled:bg-gray-400"
       >
         {isLoading ? 'Please wait...' : 'Continue to Verify Email'}

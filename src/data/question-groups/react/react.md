@@ -4,7 +4,7 @@ briefTitle: 'React'
 briefDescription: 'Test, rate and improve your React knowledge with these questions.'
 title: 'React Questions'
 description: 'Test, rate and improve your React knowledge with these questions.'
-isNew: true
+isNew: false
 seo:
   title: 'React Questions'
   description: 'Curated list of React questions to test, rate and improve your knowledge. Questions are based on real world experience and knowledge.'
@@ -35,7 +35,7 @@ questions:
       - 'Beginner'
   - question: What is the difference between Real DOM and Virtual DOM?
     answer: |
-      Virtual DOM is the representation of a UI in the form of a plain javascript object. It is a node tree that lists the elements, their attributes and content as Objects and their properties. Real DOM is the real representation of a UI which can be seen and inspected in the browser.
+      Virtual DOM is the representation of a UI in the form of a plain JavaScript object. It is a node tree that lists the elements, their attributes and content as Objects and their properties. Real DOM is the real representation of a UI which can be seen and inspected in the browser.
       Manipulating the virtual DOM is much faster than real DOM, because nothing gets drawn on the screen. React uses this virtual DOM to figure out the most efficient way to update the browser DOM.
     topics:
       - 'Core'
@@ -80,7 +80,7 @@ questions:
   - question: What are refs in React?
     answer: |
       Refs are used to get reference to a DOM node or an instance of a component. They help to access the DOM nodes or React elements created in the render method.
-      You can also use refs When you want a component to “remember” some information, but you don’t want that information to trigger new renders, you can use a ref.
+      You can also use refs when you want a component to “remember” some information, but you don’t want that information to trigger new renders, you can use a ref.
     topics:
       - 'Core'
       - 'Intermediate'
@@ -98,7 +98,7 @@ questions:
       - 'Advanced'
   - question: What is the difference between react and react-dom packages?
     answer: |
-      React is a library for building user interfaces. The package `react` contains only the renderer-agnostic code i.e. the core React library, algorithm for computing changes in the UI and other helpers. . The package `react-dom` contains the code specific to the DOM rendering of React components.
+      React is a library for building user interfaces. The package `react` contains only the renderer-agnostic code i.e. the core React library, algorithm for computing changes in the UI and other helpers. The package `react-dom` contains the code specific to the DOM rendering of React components.
     topics:
       - 'Core'
       - 'Beginner'
@@ -210,7 +210,7 @@ questions:
       - 'Intermediate'
   - question: What are Server Components in React?
     answer: |
-      Server Components in allow developers to write components that render on the server instead of the client. Unlike traditional components, Server Components do not have a client-side runtime, meaning they result in a smaller bundle size and faster loads. They can seamlessly integrate with client components and can fetch data directly from the backend without the need for an API layer. This enables developers to build rich, interactive apps with less client-side code, improving performance and developer experience.
+      Server Components allow developers to write components that render on the server instead of the client. Unlike traditional components, Server Components do not have a client-side runtime, meaning they result in a smaller bundle size and faster loads. They can seamlessly integrate with client components and can fetch data directly from the backend without the need for an API layer. This enables developers to build rich, interactive apps with less client-side code, improving performance and developer experience.
     topics:
       - 'SSR'
       - 'Intermediate'
@@ -224,7 +224,7 @@ questions:
     topics:
       - 'UX'
       - 'Intermediate'
-  - question: How React Virtual DOM works?
+  - question: How does React Virtual DOM work?
     answer: virtual-dom.md
     topics:
       - 'Core'

@@ -10,7 +10,7 @@ const questionGroups = await getAllQuestionGroups();
 <BaseLayout
   title='Questions'
   description={'Step by step guides and paths to learn different tools or technologies'}
-  permalink={'/roadmaps'}
+  permalink={'/questions'}
 >
   <SimplePageHeader
     title='Questions'
@@ -26,7 +26,7 @@ const questionGroups = await getAllQuestionGroups();
             <GridItem
               url={`/questions/${questionGroup.id}`}
               isNew={questionGroup.frontmatter.isNew}
-              title={questionGroup.frontmatter.title}
+              title={questionGroup.frontmatter.briefTitle}
               description={`${questionGroup.questions.length} Questions &middot; ${questionGroup.allTopics.length} topics`}
             />
           ))

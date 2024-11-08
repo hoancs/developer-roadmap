@@ -1,16 +1,17 @@
 ---
 jsonUrl: '/jsons/roadmaps/ai-data-scientist.json'
 pdfUrl: '/pdfs/roadmaps/ai-data-scientist.pdf'
-order: 6
+order: 5
+renderer: 'editor'
 briefTitle: 'AI and Data Scientist'
-briefDescription: 'Step by step guide to becoming an AI and Data Scientist in 2023'
+briefDescription: 'Step by step guide to becoming an AI and Data Scientist in 2024'
 title: 'AI and Data Scientist Roadmap'
-description: 'Step by step guide to becoming an AI and Data Scientist in 2023'
+description: 'Step by step guide to becoming an AI and Data Scientist in 2024'
 hasTopics: true
-isNew: true
+isNew: false
 dimensions:
   width: 968
-  height: 2243.96
+  height: 2140
 schema:
   headline: 'AI and Data Scientist Roadmap'
   description: 'Learn how to become an AI and Data Scientist with this interactive step by step guide in 2023. We also have resources and short descriptions attached to the roadmap items so you can get everything you want to learn in one place.'
@@ -21,8 +22,8 @@ seo:
   title: 'AI and Data Scientist Roadmap'
   description: 'Learn to become an AI and Data Scientist using this roadmap. Community driven, articles, resources, guides, interview questions, quizzes for modern backend development.'
   keywords:
-    - 'ai and data scientist roadmap 2023'
-    - 'ai and data scientist roadmap 2023'
+    - 'ai and data scientist roadmap 2024'
+    - 'ai and data scientist roadmap 2024'
     - 'guide to becoming an ai and data scientist'
     - 'ai and data scientist roadmap'
     - 'ai scientist'

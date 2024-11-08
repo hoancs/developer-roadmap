@@ -81,6 +81,61 @@ export async function updateResourceProgress(
   return response;
 }
 
+export function clearMigratedRoadmapProgress(
+  resourceType: string,
+  resourceId: string,
+) {
+  const migratedRoadmaps = [
+    'frontend',
+    'backend',
+    'devops',
+    'data-analyst',
+    'android',
+    'full-stack',
+    'ai-data-scientist',
+    'postgresql-dba',
+    'blockchain',
+    'qa',
+    'software-architect',
+    'cyber-security',
+    'ux-design',
+    'game-developer',
+    'server-side-game-developer',
+    'technical-writer',
+    'mlops',
+    'computer-science',
+    'react',
+    'vue',
+    'javascript',
+    'angular',
+    'nodejs',
+    'typescript',
+    'python',
+    'sql',
+  ];
+
+  if (!migratedRoadmaps.includes(resourceId)) {
+    return;
+  }
+
+  const userId = getUser()?.id;
+  if (!userId) {
+    return;
+  }
+
+  const roadmapKey = `${resourceType}-${resourceId}-${userId}-progress`;
+  const clearedKey = `${resourceType}-${resourceId}-${userId}-cleared`;
+
+  const clearedCount = parseInt(localStorage.getItem(clearedKey) || '0', 10);
+
+  if (clearedCount >= 10) {
+    return;
+  }
+
+  localStorage.removeItem(roadmapKey);
+  localStorage.setItem(clearedKey, `${clearedCount + 1}`);
+}
+
 export async function getResourceProgress(
   resourceType: 'roadmap' | 'best-practice',
   resourceId: string,
@@ -112,11 +167,11 @@ export async function getResourceProgress(
     return loadFreshProgress(resourceType, resourceId);
   } else {
     setResourceProgress(
-        resourceType,
-        resourceId,
-        progress?.done || [],
-        progress?.learning || [],
-        progress?.skipped || [],
+      resourceType,
+      resourceId,
+      progress?.done || [],
+      progress?.learning || [],
+      progress?.skipped || [],
     );
   }
 
@@ -229,6 +284,8 @@ export function topicSelectorAll(
       `[data-group-id="check:${topicId}"]`, // Matching "check:XXXX" box of the topic
       `[data-node-id="${topicId}"]`, // Matching custom roadmap nodes
       `[data-id="${topicId}"]`, // Matching custom roadmap nodes
+      `[data-checklist-checkbox][data-checklist-id="${topicId}"]`, // Matching checklist checkboxes
+      `[data-checklist-label][data-checklist-id="${topicId}"]`, // Matching checklist labels
     ],
     parentElement,
   ).forEach((element) => {
@@ -307,11 +364,11 @@ export async function renderResourceProgress(
 }
 
 function getMatchingElements(
-  quries: string[],
+  queries: string[],
   parentElement: Document | SVGElement | HTMLDivElement = document,
 ): Element[] {
   const matchingElements: Element[] = [];
-  quries.forEach((query) => {
+  queries.forEach((query) => {
     parentElement.querySelectorAll(query).forEach((element) => {
       matchingElements.push(element);
     });
@@ -330,7 +387,9 @@ export function refreshProgressCounters() {
 
   const totalClickable = getMatchingElements([
     '.clickable-group',
+    '[data-type="todo"]',
     '[data-type="topic"]',
+    '[data-type="checklist-item"]',
     '[data-type="subtopic"]',
     '.react-flow__node-topic',
     '.react-flow__node-subtopic',
@@ -348,6 +407,9 @@ export function refreshProgressCounters() {
 
   const totalCheckBoxesDone = document.querySelectorAll(
     '[data-group-id^="check:"].done',
+  ).length;
+  const totalCheckBoxes2Done = document.querySelectorAll(
+    '[data-type="todo-checkbox"].done',
   ).length;
   const totalCheckBoxesLearning = document.querySelectorAll(
     '[data-group-id^="check:"].learning',
@@ -373,7 +435,9 @@ export function refreshProgressCounters() {
       '.clickable-group.done:not([data-group-id^="ext_link:"])',
       '[data-node-id].done', // All data-node-id=*.done elements are custom roadmap nodes
       '[data-id].done', // All data-id=*.done elements are custom roadmap nodes
-    ]).length - totalCheckBoxesDone;
+    ]).length -
+    totalCheckBoxesDone -
+    totalCheckBoxes2Done;
   const totalLearning =
     getMatchingElements([
       '.clickable-group.learning',
@@ -389,9 +453,9 @@ export function refreshProgressCounters() {
 
   const doneCountEls = document.querySelectorAll('[data-progress-done]');
   if (doneCountEls.length > 0) {
-    doneCountEls.forEach(
-      (doneCountEl) => (doneCountEl.innerHTML = `${totalDone}`),
-    );
+    doneCountEls.forEach((doneCountEl) => {
+      doneCountEl.innerHTML = `${totalDone + totalSkipped}`;
+    });
   }
 
   const learningCountEls = document.querySelectorAll(

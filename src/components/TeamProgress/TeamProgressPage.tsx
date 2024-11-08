@@ -10,6 +10,7 @@ import { getUrlParams, setUrlParams } from '../../lib/browser';
 import { useAuth } from '../../hooks/use-auth';
 import { MemberProgressModal } from './MemberProgressModal';
 import { MemberCustomProgressModal } from './MemberCustomProgressModal';
+import { canManageCurrentRoadmap } from '../../stores/roadmap.ts';
 
 export type UserProgress = {
   resourceTitle: string;
@@ -22,6 +23,8 @@ export type UserProgress = {
   total: number;
   updatedAt: string;
   isCustomResource?: boolean;
+  roadmapSlug?: string;
+  aiRoadmapId?: string;
 };
 
 export type TeamMember = {
@@ -39,6 +42,7 @@ export type GroupByRoadmap = {
   resourceTitle: string;
   resourceType: string;
   isCustomResource?: boolean;
+  roadmapSlug?: string;
   members: {
     member: TeamMember;
     progress: UserProgress | undefined;
@@ -71,7 +75,7 @@ export function TeamProgressPage() {
 
   async function getTeamProgress() {
     const { response, error } = await httpGet<TeamMember[]>(
-      `${import.meta.env.PUBLIC_API_URL}/v1-get-team-progress/${teamId}`
+      `${import.meta.env.PUBLIC_API_URL}/v1-get-team-progress/${teamId}`,
     );
     if (error || !response) {
       toast.error(error?.message || 'Failed to get team progress');
@@ -87,7 +91,7 @@ export function TeamProgressPage() {
           return 1;
         }
         return 0;
-      })
+      }),
     );
   }
 
@@ -116,7 +120,7 @@ export function TeamProgressPage() {
     const members: GroupByRoadmap['members'] = [];
     for (const member of teamMembers) {
       const progress = member.progress.find(
-        (progress) => progress.resourceId === roadmap
+        (progress) => progress.resourceId === roadmap,
       );
       if (!progress) {
         continue;
@@ -139,6 +143,7 @@ export function TeamProgressPage() {
       resourceId: roadmap,
       resourceTitle: members?.[0].progress?.resourceTitle || '',
       resourceType: 'roadmap',
+      roadmapSlug: members?.[0].progress?.roadmapSlug,
       members,
       isCustomResource,
     });
@@ -174,7 +179,7 @@ export function TeamProgressPage() {
             setShowMemberProgress({
               resourceId: showMemberProgress.resourceId,
               member: teamMembers.find(
-                (member) => member.email === user?.email
+                (member) => member.email === user?.email,
               )!,
               isCustomResource: showMemberProgress.isCustomResource,
             });
@@ -188,7 +193,7 @@ export function TeamProgressPage() {
             key={grouping.value}
             className={`rounded-md border p-1 px-2 text-sm ${
               selectedGrouping === grouping.value
-                ? ' border-gray-400 bg-gray-200 '
+                ? 'border-gray-400 bg-gray-200'
                 : ''
             }`}
             onClick={() => setSelectedGrouping(grouping.value)}
@@ -220,20 +225,32 @@ export function TeamProgressPage() {
         )}
         {selectedGrouping === 'member' && (
           <div className="grid gap-4 sm:grid-cols-2">
-            {teamMembers.map((member) => (
-              <MemberProgressItem
-                key={member._id}
-                member={member}
-                isMyProgress={member?.email === user?.email}
-                onShowResourceProgress={(resourceId, isCustomResource) => {
-                  setShowMemberProgress({
-                    resourceId,
-                    member,
-                    isCustomResource,
-                  });
-                }}
-              />
-            ))}
+            {teamMembers.map((member) => {
+              const canViewMemberProgress =
+                currentTeam?.role !== 'member' ||
+                !currentTeam?.personalProgressOnly ||
+                member.email === user?.email;
+
+              if (!canViewMemberProgress) {
+                return null;
+              }
+
+              return (
+                <MemberProgressItem
+                  key={member._id}
+                  member={member}
+                  teamId={teamId}
+                  isMyProgress={member?.email === user?.email}
+                  onShowResourceProgress={(resourceId, isCustomResource) => {
+                    setShowMemberProgress({
+                      resourceId,
+                      member,
+                      isCustomResource,
+                    });
+                  }}
+                />
+              );
+            })}
           </div>
         )}
       </div>

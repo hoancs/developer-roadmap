@@ -2,14 +2,17 @@ import { MailIcon } from '../ReactIcons/MailIcon';
 import { MemberActionDropdown } from './MemberActionDropdown';
 import { MemberRoleBadge } from './RoleBadge';
 import type { TeamMemberItem } from './TeamMembersPage';
-import { $canManageCurrentTeam } from '../../stores/team';
+import { $canManageCurrentTeam, $currentTeam } from '../../stores/team';
 import { useStore } from '@nanostores/react';
+import { useAuth } from '../../hooks/use-auth';
+import { cn } from '../../lib/classname';
 
 type TeamMemberProps = {
   member: TeamMemberItem;
   userId: string;
   index: number;
   teamId: string;
+  canViewProgress: boolean;
   canManageCurrentTeam: boolean;
   onDeleteMember: () => void;
   onUpdateMember: () => void;
@@ -27,15 +30,21 @@ export function TeamMemberItem(props: TeamMemberProps) {
     userId,
     onDeleteMember,
     onSendProgressReminder,
+    canViewProgress = true,
   } = props;
 
+  const currentTeam = useStore($currentTeam);
   const canManageTeam = useStore($canManageCurrentTeam);
-  const showNoProgressBadge = !member.hasProgress && member.status === 'joined';
+  const showNoProgressBadge = canViewProgress && !member.hasProgress && member.status === 'joined';
   const allowProgressReminder =
     canManageTeam &&
     !member.hasProgress &&
     member.status === 'joined' &&
     member.userId !== userId;
+  const isPersonalProgressOnly =
+    currentTeam?.personalProgressOnly &&
+    currentTeam.role === 'member' &&
+    String(member._id) !== currentTeam.memberId;
 
   return (
     <div
@@ -59,7 +68,23 @@ export function TeamMemberItem(props: TeamMemberProps) {
           </div>
           <div className="flex items-center">
             <h3 className="inline-grid grid-cols-[auto_auto_auto] items-center font-medium">
-              <span className="truncate">{member.name}</span>
+              <a
+                href={`/team/member?t=${member.teamId}&m=${member._id}`}
+                className={cn(
+                  'truncate',
+                  isPersonalProgressOnly
+                    ? 'pointer-events-none cursor-default no-underline'
+                    : '',
+                )}
+                onClick={(e) => {
+                  if (isPersonalProgressOnly) {
+                    e.preventDefault();
+                  }
+                }}
+                aria-disabled={isPersonalProgressOnly}
+              >
+                {member.name}
+              </a>
               {showNoProgressBadge && (
                 <span className="ml-2 rounded-full bg-red-400 px-2 py-0.5 text-xs font-normal text-white">
                   No Progress

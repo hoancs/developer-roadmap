@@ -1,19 +1,19 @@
 import { wireframeJSONToSVG } from 'roadmap-renderer';
-import { httpPost } from '../../lib/http';
 import { isLoggedIn } from '../../lib/jwt';
+import type {
+  ResourceProgressType,
+  ResourceType,
+} from '../../lib/resource-progress';
 import {
   refreshProgressCounters,
   renderResourceProgress,
   renderTopicProgress,
   updateResourceProgress,
 } from '../../lib/resource-progress';
-import type {
-  ResourceProgressType,
-  ResourceType,
-} from '../../lib/resource-progress';
 import { pageProgressMessage } from '../../stores/page';
 import { showLoginPopup } from '../../lib/popup';
 import { replaceChildren } from '../../lib/dom.ts';
+import { setUrlParams } from '../../lib/browser.ts';
 
 export class Renderer {
   resourceId: string;
@@ -57,7 +57,7 @@ export class Renderer {
     }
 
     // Clone it so we can use it later
-    this.loaderHTML = this.loaderEl!.innerHTML;
+    this.loaderHTML = this.loaderEl?.innerHTML!;
     const dataset = this.containerEl.dataset;
 
     this.resourceType = dataset.resourceType!;
@@ -66,11 +66,7 @@ export class Renderer {
     return true;
   }
 
-  /**
-   * @param { string } jsonUrl
-   * @returns {Promise<SVGElement>}
-   */
-  jsonToSvg(jsonUrl: string) {
+  jsonToSvg(jsonUrl: string): Promise<void> | null {
     if (!jsonUrl) {
       console.error('jsonUrl not defined in frontmatter');
       return null;
@@ -93,7 +89,6 @@ export class Renderer {
       })
       .then((svg) => {
         replaceChildren(this.containerEl!, svg);
-        // this.containerEl?.replaceChildren(svg);
       })
       .then(() => {
         return renderResourceProgress(
@@ -117,19 +112,6 @@ export class Renderer {
       });
   }
 
-  trackVisit() {
-    if (!isLoggedIn()) {
-      return;
-    }
-
-    window.setTimeout(() => {
-      httpPost(`${import.meta.env.PUBLIC_API_URL}/v1-visit`, {
-        resourceId: this.resourceId,
-        resourceType: this.resourceType,
-      }).then(() => null);
-    }, 0);
-  }
-
   onDOMLoaded() {
     if (!this.prepareConfig()) {
       return;
@@ -137,8 +119,6 @@ export class Renderer {
 
     const urlParams = new URLSearchParams(window.location.search);
     const roadmapType = urlParams.get('r');
-
-    this.trackVisit();
 
     if (roadmapType) {
       this.switchRoadmap(`/${roadmapType}.json`);
@@ -156,19 +136,8 @@ export class Renderer {
 
     const newJsonFileSlug = newJsonUrl.split('/').pop()?.replace('.json', '');
 
-    // Update the URL and attach the new roadmap type
-    if (window?.history?.pushState) {
-      const url = new URL(window.location.href);
-      const type = this.resourceType[0]; // r for roadmap, b for best-practices
-
-      url.searchParams.delete(type);
-
-      if (newJsonFileSlug !== this.resourceId) {
-        url.searchParams.set(type, newJsonFileSlug!);
-      }
-
-      window.history.pushState(null, '', url.toString());
-    }
+    const type = this.resourceType[0]; // r for roadmap, b for best-practices
+    setUrlParams({ [type]: newJsonFileSlug! });
 
     this.jsonToSvg(newJsonUrl)?.then(() => {});
   }
@@ -177,6 +146,10 @@ export class Renderer {
     if (!isLoggedIn()) {
       showLoginPopup();
       return;
+    }
+
+    if (/^check:/.test(topicId)) {
+      topicId = topicId.replace('check:', '');
     }
 
     pageProgressMessage.set('Updating progress');

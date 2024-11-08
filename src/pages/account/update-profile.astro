@@ -1,6 +1,6 @@
 ---
 import AccountSidebar from '../../components/AccountSidebar.astro';
-import { UpdateProfileForm } from '../../components/UpdateProfile/UpdateProfileForm';
+import { UpdatePublicProfileForm } from '../../components/UpdateProfile/UpdatePublicProfileForm';
 import AccountLayout from '../../layouts/AccountLayout.astro';
 ---
 
@@ -8,8 +8,9 @@ import AccountLayout from '../../layouts/AccountLayout.astro';
   title='Update Profile'
   noIndex={true}
   initialLoadingMessage={'Loading profile'}
+  permalink="/account/update-profile"
 >
   <AccountSidebar activePageId='profile' activePageTitle='Profile'>
-    <UpdateProfileForm client:load />
+    <UpdatePublicProfileForm client:load />
   </AccountSidebar>
 </AccountLayout>
