@@ -18,4 +18,4 @@ jobs:
           SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
         run: |
           npm install -g aws-cost-cli
-          aws-cost -k $AWS_KEY -s $AWS_SECRET -r $AWS_REGION -S $SLACK_TOKEN -C $SLACK_CHANNEL
+          #aws-cost -k $AWS_KEY -s $AWS_SECRET -r $AWS_REGION -S $SLACK_TOKEN -C $SLACK_CHANNEL
